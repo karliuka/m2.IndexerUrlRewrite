@@ -21,15 +21,14 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
-use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
-use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class CategoryIndexer implements IndexerActionInterface, MviewActionInterface
+/**
+ * IndexerUrlRewrite category indexer model
+ */
+class CategoryIndexer extends AbstractIndexer
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
@@ -40,11 +39,6 @@ class CategoryIndexer implements IndexerActionInterface, MviewActionInterface
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
      */
     protected $_categoryUrlRewriteGenerator;
-          
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     */     
-    protected $_urlPersist;
         
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
@@ -58,67 +52,41 @@ class CategoryIndexer implements IndexerActionInterface, MviewActionInterface
     ) {
         $this->_categoryCollection = $categoryCollection;
         $this->_categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;   
-        $this->_urlPersist = $urlPersist;
+        parent::__construct($urlPersist);
     }
     	
     /**
-     * Execute materialization on ids entities
+     * Retrieve entity collection
      *
-     * @param int[] $ids
-     * @return void
+     * @param integer $storeId
+     * @return object
      */
-    public function execute($ids)
-    {
-    }
-
+	protected function getEntityCollection($storeId)
+	{
+		$this->_categoryCollection->setStoreId($storeId)
+			->addAttributeToSelect(['url_path', 'url_key'])
+			->addAttributeToFilter('level', array('gt' => 1));
+			
+		return $this->_categoryCollection;
+	}
+    
     /**
-     * Execute full indexation
+     * Retrieve entity type
      *
-     * @return void
+     * @return string
      */
-    public function executeFull()
-    {
-		$this->_categoryCollection
-			->setStoreId(Store::DEFAULT_STORE_ID)
-			->addAttributeToSelect(['url_path', 'url_key']);
-				
-        foreach($this->_categoryCollection as $category) {
-            if ($category->getLevel() < 2) {
-				continue;
-			}
-            $this->_urlPersist->deleteByData([
-                UrlRewrite::ENTITY_ID => $category->getId(),
-                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::REDIRECT_TYPE => 0,
-                UrlRewrite::STORE_ID => Store::DEFAULT_STORE_ID
-            ]);
-            try {
-                $this->_urlPersist->replace(
-                    $this->_categoryUrlRewriteGenerator->generate($category)
-                );
-            } catch(\Exception $e) {
-				// add log
-            }
-        }         		
-    }
-
+	protected function getEntityType()
+	{
+		return CategoryUrlRewriteGenerator::ENTITY_TYPE;	
+	}
+    
     /**
-     * Execute partial indexation by ID list
+     * Retrieve entity rewrite generator
      *
-     * @param int[] $ids
-     * @return void
+     * @return object
      */
-    public function executeList(array $ids)
-    {
-    }
-
-    /**
-     * Execute partial indexation by ID
-     *
-     * @param int $id
-     * @return void
-     */
-    public function executeRow($id)
-    {
-    }
+	protected function getRewriteGenerator()
+	{
+		return $this->_categoryUrlRewriteGenerator;
+	}
 }

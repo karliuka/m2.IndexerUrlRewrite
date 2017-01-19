@@ -21,15 +21,14 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
-use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
-use Magento\Store\Model\Store;
 use Magento\Cms\Model\ResourceModel\Page\Collection as CmsPageCollection;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class CmsPageIndexer implements IndexerActionInterface, MviewActionInterface
+/**
+ * IndexerUrlRewrite cms page indexer model
+ */
+class CmsPageIndexer extends AbstractIndexer
 {
     /**
      * @var \Magento\Cms\Model\ResourceModel\Page\Collection
@@ -40,11 +39,6 @@ class CmsPageIndexer implements IndexerActionInterface, MviewActionInterface
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
      */
     protected $_cmsPageUrlRewriteGenerator;  
-          
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     */     
-    protected $_urlPersist;
         
     /**
      * @param \Magento\Cms\Model\ResourceModel\Page\Collection $cmsPageCollection
@@ -58,65 +52,41 @@ class CmsPageIndexer implements IndexerActionInterface, MviewActionInterface
     ) {
         $this->_cmsPageCollection = $cmsPageCollection;
         $this->_cmsPageUrlRewriteGenerator = $cmsPageUrlRewriteGenerator;        
-        $this->_urlPersist = $urlPersist;
+        parent::__construct($urlPersist);
     }
     	
     /**
-     * Execute materialization on ids entities
+     * Retrieve entity collection
      *
-     * @param int[] $ids
-     * @return void
+     * @param integer $storeId
+     * @return object
      */
-    public function execute($ids)
-    {
-    }
-
-    /**
-     * Execute full indexation
-     *
-     * @return void
-     */
-    public function executeFull()
-    {
+	protected function getEntityCollection($storeId)
+	{
 		$this->_cmsPageCollection
-			->addStoreFilter(Store::DEFAULT_STORE_ID)
+			->addStoreFilter($storeId)
 			->addFieldToSelect(['identifier']);
- 
-		foreach($this->_cmsPageCollection as $cmsPage) { 
-            $this->_urlPersist->deleteByData([
-                UrlRewrite::ENTITY_ID => $cmsPage->getId(),
-                UrlRewrite::ENTITY_TYPE => CmsPageUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::REDIRECT_TYPE => 0,
-                UrlRewrite::STORE_ID => Store::DEFAULT_STORE_ID
-            ]);
-            try {
-                $this->_urlPersist->replace(
-                    $this->_cmsPageUrlRewriteGenerator->generate($cmsPage)
-                );
-                $cmsPage->getId();
-            } catch(\Exception $e) {
-				// add log
-            }
-        }          		
-    }
-
+			
+		return $this->_cmsPageCollection;
+	}
+    
     /**
-     * Execute partial indexation by ID list
+     * Retrieve entity type
      *
-     * @param int[] $ids
-     * @return void
+     * @return string
      */
-    public function executeList(array $ids)
-    {
-    }
-
+	protected function getEntityType()
+	{
+		return CmsPageUrlRewriteGenerator::ENTITY_TYPE;	
+	}
+    
     /**
-     * Execute partial indexation by ID
+     * Retrieve entity rewrite generator
      *
-     * @param int $id
-     * @return void
+     * @return object
      */
-    public function executeRow($id)
-    {
-    }
+	protected function getRewriteGenerator()
+	{
+		return $this->_cmsPageUrlRewriteGenerator;
+	}
 }

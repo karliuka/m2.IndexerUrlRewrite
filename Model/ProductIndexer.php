@@ -21,15 +21,14 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
-use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
-use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class ProductIndexer implements IndexerActionInterface, MviewActionInterface
+/**
+ * IndexerUrlRewrite product indexer model
+ */
+class ProductIndexer extends AbstractIndexer
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -40,11 +39,6 @@ class ProductIndexer implements IndexerActionInterface, MviewActionInterface
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
      */
     protected $_productUrlRewriteGenerator;
-          
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     */     
-    protected $_urlPersist;
         
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
@@ -58,64 +52,40 @@ class ProductIndexer implements IndexerActionInterface, MviewActionInterface
     ) {
         $this->_productCollection = $productCollection;
         $this->_productUrlRewriteGenerator = $productUrlRewriteGenerator;       
-        $this->_urlPersist = $urlPersist;
+        parent::__construct($urlPersist);
     }
     	
     /**
-     * Execute materialization on ids entities
+     * Retrieve entity collection
      *
-     * @param int[] $ids
-     * @return void
+     * @param integer $storeId
+     * @return object
      */
-    public function execute($ids)
-    {
-    }
-
-    /**
-     * Execute full indexation
-     *
-     * @return void
-     */
-    public function executeFull()
-    {
-		$this->_productCollection
-			->setStoreId(Store::DEFAULT_STORE_ID)
+	protected function getEntityCollection($storeId)
+	{
+		$this->_productCollection->setStoreId($storeId)
 			->addAttributeToSelect(['url_path', 'url_key']);
-				
-        foreach($this->_productCollection as $product) {
-            $this->_urlPersist->deleteByData([
-                UrlRewrite::ENTITY_ID => $product->getId(),
-                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::REDIRECT_TYPE => 0,
-                UrlRewrite::STORE_ID => Store::DEFAULT_STORE_ID
-            ]);
-            try {
-                $this->_urlPersist->replace(
-                    $this->_productUrlRewriteGenerator->generate($product)
-                );
-            } catch(\Exception $e) {
-				// add log
-            }
-        }  		
-    }
-
+			
+		return $this->_productCollection;
+	}
+    
     /**
-     * Execute partial indexation by ID list
+     * Retrieve entity type
      *
-     * @param int[] $ids
-     * @return void
+     * @return string
      */
-    public function executeList(array $ids)
-    {
-    }
-
+	protected function getEntityType()
+	{
+		return ProductUrlRewriteGenerator::ENTITY_TYPE;	
+	}
+    
     /**
-     * Execute partial indexation by ID
+     * Retrieve entity rewrite generator
      *
-     * @param int $id
-     * @return void
+     * @return object
      */
-    public function executeRow($id)
-    {
-    }
+	protected function getRewriteGenerator()
+	{
+		return $this->_productUrlRewriteGenerator;
+	}
 }
