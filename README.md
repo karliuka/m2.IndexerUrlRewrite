@@ -3,7 +3,7 @@ Extension rebuild UrlRewrite index.
 
 ## Install with Composer as you go
 
-1. Go to Magento2 root folder
+1. Go to Magento 2 root folder
 
 2. Enter following commands to install module:
 
