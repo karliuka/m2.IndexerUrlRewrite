@@ -8,7 +8,7 @@ Extension rebuild UrlRewrite index.
 2. Enter following commands to install module:
 
     ```bash
-    composer require faonni/module-browser
+    composer require faonni/module-indexer-url-rewrite
     ```
    Wait while dependencies are updated.
 
