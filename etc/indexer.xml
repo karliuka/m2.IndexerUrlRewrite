@@ -8,15 +8,15 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
-    <indexer id="product_url_rewrite" view_id="product_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\ProductIndexer" shared_index="urlrewrite">
+    <indexer id="product_url_rewrite" view_id="product_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\ProductIndexer">
         <title translate="true">Product URL rewrites</title>
         <description translate="true">Indexed Product URL rewrites association</description>
     </indexer>
-    <indexer id="category_url_rewrite" view_id="category_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CategoryIndexer" shared_index="urlrewrite">
+    <indexer id="category_url_rewrite" view_id="category_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CategoryIndexer">
         <title translate="true">Category URL rewrites</title>
         <description translate="true">Indexed Category URL rewrites association</description>
     </indexer>
-    <indexer id="cms_page_url_rewrite" view_id="cms_page_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CmsPageIndexer" shared_index="urlrewrite">
+    <indexer id="cms_page_url_rewrite" view_id="cms_page_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CmsPageIndexer">
         <title translate="true">Cms Page URL rewrites</title>
         <description translate="true">Indexed Cms Page URL rewrites association</description>
     </indexer>  

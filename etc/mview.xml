@@ -9,12 +9,18 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
     <view id="product_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\ProductIndexer" group="indexer">
-        <subscriptions/>
+		<subscriptions>
+			<table name="catalog_product_entity_varchar" entity_column="entity_id" />
+		</subscriptions>
     </view>
     <view id="category_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CategoryIndexer" group="indexer">
-        <subscriptions/>
+		<subscriptions>
+			<table name="catalog_category_entity_varchar" entity_column="entity_id" />
+		</subscriptions>
     </view>
     <view id="cms_page_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CmsPageIndexer" group="indexer">
-        <subscriptions/>
+		<subscriptions>
+			<table name="cms_page" entity_column="page_id" />
+		</subscriptions>
     </view>
 </config>
