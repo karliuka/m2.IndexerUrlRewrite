@@ -3,16 +3,23 @@
     "description": "Extension rebuild UrlRewrite index.",
     "type": "magento2-module",
 	"version": "2.0.4",
+    "authors": [{
+        "name" : "Karliuka Vitalii",
+        "email": "karliuka.vitalii@gmail.com"
+    }],	
 	"license": [
 		"OSL-3.0"
-		],
+	],
 	"require": {
-		"php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0"
-		},
+		"magento/module-catalog-url-rewrite": "100.0.*|100.1.*|100.2.*",
+		"magento/module-cms-url-rewrite": "100.0.*|100.1.*|100.2.*"
+	},	
 	"autoload": {
-	"files": [ "registration.php" ],
-	"psr-4": {
-		"Faonni\\IndexerUrlRewrite\\": ""
+		"files": [ 
+			"registration.php" 
+		],
+		"psr-4": {
+			"Faonni\\IndexerUrlRewrite\\": ""
 		}
 	}
 }
