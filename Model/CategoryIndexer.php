@@ -10,6 +10,8 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * IndexerUrlRewrite category indexer model
  */
@@ -24,7 +26,11 @@ class CategoryIndexer extends AbstractIndexer
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
      */
     protected $_categoryUrlRewriteGenerator;
-        
+
+
+
+    protected $_storeManager;
+
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
      * @param \Magento\Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
@@ -33,10 +39,12 @@ class CategoryIndexer extends AbstractIndexer
     public function __construct(
         CategoryCollection $categoryCollection,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,        
-        UrlPersistInterface $urlPersist
+        UrlPersistInterface $urlPersist,
+        StoreManagerInterface $storeManager
     ) {
         $this->_categoryCollection = $categoryCollection;
-        $this->_categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;   
+        $this->_categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
+        $this->_storeManager  = $storeManager;
         parent::__construct($urlPersist);
     }
     	
@@ -48,10 +56,11 @@ class CategoryIndexer extends AbstractIndexer
      */
 	protected function getEntityCollection($storeId)
 	{
+		$this->_categoryCollection->clear();
 		$this->_categoryCollection->setStoreId($storeId)
 			->addAttributeToSelect(['url_path', 'url_key'])
 			->addAttributeToFilter('level', array('gt' => 1));
-			
+
 		return $this->_categoryCollection;
 	}
     
