@@ -21,6 +21,8 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
      */     
     protected $_urlPersist;
+
+    protected $_storeManager;
         
     /**
      * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
@@ -59,17 +61,24 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @return void
      */
     public function executeFull()
-    {	
-        foreach($this->getEntityCollection(Store::DEFAULT_STORE_ID) as $entity) {
+    {
+        foreach ($this->_storeManager->getStores() as $store){
+            $this->_storeManager->setCurrentStore($store->getId());
+            $this->executeStore($store->getId());
+        }
+    }
+
+    private function executeStore($storeId){
+        foreach($this->getEntityCollection($storeId) as $entity) {
             $this->deleteByEntity($entity);
             try {
                 $this->_urlPersist->replace(
                     $this->getRewriteGenerator()->generate($entity)
                 );
             } catch(\Exception $e) {
-				// add log
+                // add log
             }
-        }  		
+        }
     }
     
     /**
@@ -84,7 +93,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
 			UrlRewrite::ENTITY_ID => $entity->getId(),
 			UrlRewrite::ENTITY_TYPE => $this->getEntityType(),
 			UrlRewrite::REDIRECT_TYPE => 0,
-			UrlRewrite::STORE_ID => Store::DEFAULT_STORE_ID
+			UrlRewrite::STORE_ID => $entity->getStore() ? $entity->getStore()->getId() : Store::DEFAULT_STORE_ID
 		]);	
 	}
     	

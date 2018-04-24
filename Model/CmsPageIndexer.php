@@ -10,6 +10,8 @@ use Magento\Cms\Model\ResourceModel\Page\Collection as CmsPageCollection;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * IndexerUrlRewrite cms page indexer model
  */
@@ -23,8 +25,10 @@ class CmsPageIndexer extends AbstractIndexer
     /**
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
      */
-    protected $_cmsPageUrlRewriteGenerator;  
-        
+    protected $_cmsPageUrlRewriteGenerator;
+
+    protected $_storeManager;
+
     /**
      * @param \Magento\Cms\Model\ResourceModel\Page\Collection $cmsPageCollection
      * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
@@ -33,10 +37,12 @@ class CmsPageIndexer extends AbstractIndexer
     public function __construct(
         CmsPageCollection $cmsPageCollection,
         CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator,        
-        UrlPersistInterface $urlPersist
+        UrlPersistInterface $urlPersist,
+        StoreManagerInterface $storeManager
     ) {
         $this->_cmsPageCollection = $cmsPageCollection;
-        $this->_cmsPageUrlRewriteGenerator = $cmsPageUrlRewriteGenerator;        
+        $this->_cmsPageUrlRewriteGenerator = $cmsPageUrlRewriteGenerator;
+        $this->_storeManager  = $storeManager;
         parent::__construct($urlPersist);
     }
     	
