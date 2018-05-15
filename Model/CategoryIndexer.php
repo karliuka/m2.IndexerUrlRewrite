@@ -8,33 +8,35 @@ namespace Faonni\IndexerUrlRewrite\Model;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
-use Magento\Store\Model\StoreManagerInterface;
-
 /**
- * IndexerUrlRewrite category indexer model
+ * Category Indexer
  */
 class CategoryIndexer extends AbstractIndexer
 {
     /**
+     * Category Collection
+     * 
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $_categoryCollection;
     
     /**
+     * UrlRewrite Generator
+     * 
      * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
      */
-    protected $_categoryUrlRewriteGenerator;
-
-
-
-    protected $_storeManager;
+    protected $_urlRewriteGenerator;
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
-     * @param \Magento\Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
-     * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
+     * Initialize Indexer
+     * 
+     * @param CategoryCollection $categoryCollection
+     * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
+     * @param UrlPersistInterface $urlPersist
+     * @param StoreManagerInterface $storeManager     
      */
     public function __construct(
         CategoryCollection $categoryCollection,
@@ -43,9 +45,12 @@ class CategoryIndexer extends AbstractIndexer
         StoreManagerInterface $storeManager
     ) {
         $this->_categoryCollection = $categoryCollection;
-        $this->_categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
-        $this->_storeManager  = $storeManager;
-        parent::__construct($urlPersist);
+        $this->_urlRewriteGenerator = $categoryUrlRewriteGenerator;
+
+        parent::__construct(
+			$urlPersist, 
+			$storeManager
+		);
     }
     	
     /**
@@ -81,6 +86,6 @@ class CategoryIndexer extends AbstractIndexer
      */
 	protected function getRewriteGenerator()
 	{
-		return $this->_categoryUrlRewriteGenerator;
+		return $this->_urlRewriteGenerator;
 	}
 }

@@ -21,7 +21,7 @@ Extension rebuild UrlRewrite index.
     	
 3. Command options:	
     ```bash	
-	php bin/magento indexer:reindex product_url_rewrite
 	php bin/magento indexer:reindex category_url_rewrite
+	php bin/magento indexer:reindex product_url_rewrite
 	php bin/magento indexer:reindex cms_page_url_rewrite
     ```

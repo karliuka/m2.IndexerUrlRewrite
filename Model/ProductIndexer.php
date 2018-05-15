@@ -8,30 +8,35 @@ namespace Faonni\IndexerUrlRewrite\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
-use Magento\Store\Model\StoreManagerInterface;
-
 /**
- * IndexerUrlRewrite product indexer model
+ * Product Indexer
  */
 class ProductIndexer extends AbstractIndexer
 {
     /**
+     * Product Collection
+     * 
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $_productCollection;
     
     /**
+     * UrlRewrite Generator
+     * 
      * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
      */
-    protected $_productUrlRewriteGenerator;
+    protected $_urlRewriteGenerator;
 
-    protected $_storeManager;
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
-     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator
-     * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
+     * Initialize Indexer
+     * 
+     * @param ProductCollection $productCollection
+     * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param UrlPersistInterface $urlPersist
+     * @param StoreManagerInterface $storeManager     
      */
     public function __construct(
         ProductCollection $productCollection,
@@ -40,9 +45,12 @@ class ProductIndexer extends AbstractIndexer
         StoreManagerInterface $storeManager
     ) {
         $this->_productCollection = $productCollection;
-        $this->_productUrlRewriteGenerator = $productUrlRewriteGenerator;
-        $this->_storeManager  = $storeManager;
-        parent::__construct($urlPersist);
+        $this->_urlRewriteGenerator = $productUrlRewriteGenerator;
+
+        parent::__construct(
+			$urlPersist, 
+			$storeManager
+		);
     }
     	
     /**
@@ -77,6 +85,6 @@ class ProductIndexer extends AbstractIndexer
      */
 	protected function getRewriteGenerator()
 	{
-		return $this->_productUrlRewriteGenerator;
+		return $this->_urlRewriteGenerator;
 	}
 }

@@ -9,28 +9,41 @@ namespace Faonni\IndexerUrlRewrite\Model;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * IndexerUrlRewrite abstract indexer model
+ * Abstract Indexer
  */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
 {         
     /**
+     * Url Persist
+     * 
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
      */     
     protected $_urlPersist;
-
+    
+    /**
+     * Store Manager
+     * 
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     */ 
     protected $_storeManager;
         
     /**
-     * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
+     * Initialize Indexer
+     * 
+     * @param UrlPersistInterface $urlPersist
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(     
-        UrlPersistInterface $urlPersist
+        UrlPersistInterface $urlPersist,
+        StoreManagerInterface $storeManager
     ) {      
         $this->_urlPersist = $urlPersist;
+        $this->_storeManager = $storeManager;
     }
     
     /**
@@ -67,7 +80,12 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
             $this->executeStore($store->getId());
         }
     }
-
+    
+    /**
+     * Execute indexation from store
+     *
+     * @return void
+     */
     private function executeStore($storeId){
         foreach($this->getEntityCollection($storeId) as $entity) {
             $this->deleteByEntity($entity);
@@ -89,11 +107,15 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     protected function deleteByEntity($entity)
     {
+		$storeId = $entity->getStore() 
+			? $entity->getStore()->getId() 
+			: Store::DEFAULT_STORE_ID;
+			
 		$this->_urlPersist->deleteByData([
 			UrlRewrite::ENTITY_ID => $entity->getId(),
 			UrlRewrite::ENTITY_TYPE => $this->getEntityType(),
 			UrlRewrite::REDIRECT_TYPE => 0,
-			UrlRewrite::STORE_ID => $entity->getStore() ? $entity->getStore()->getId() : Store::DEFAULT_STORE_ID
+			UrlRewrite::STORE_ID => $storeId
 		]);	
 	}
     	

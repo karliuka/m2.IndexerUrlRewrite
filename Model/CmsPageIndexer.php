@@ -7,32 +7,36 @@
 namespace Faonni\IndexerUrlRewrite\Model;
 
 use Magento\Cms\Model\ResourceModel\Page\Collection as CmsPageCollection;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
-use Magento\Store\Model\StoreManagerInterface;
-
 /**
- * IndexerUrlRewrite cms page indexer model
+ * CmsPage Indexer
  */
 class CmsPageIndexer extends AbstractIndexer
 {
     /**
+     * CmsPage Collection
+     * 
      * @var \Magento\Cms\Model\ResourceModel\Page\Collection
      */
     protected $_cmsPageCollection;
     
     /**
+     * UrlRewrite Generator
+     * 
      * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator
      */
-    protected $_cmsPageUrlRewriteGenerator;
-
-    protected $_storeManager;
+    protected $_urlRewriteGenerator;
 
     /**
-     * @param \Magento\Cms\Model\ResourceModel\Page\Collection $cmsPageCollection
-     * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
-     * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
+     * Initialize Indexer
+     * 
+     * @param CmsPageCollection $cmsPageCollection
+     * @param CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
+     * @param UrlPersistInterface $urlPersist
+     * @param StoreManagerInterface $storeManager     
      */
     public function __construct(
         CmsPageCollection $cmsPageCollection,
@@ -41,9 +45,12 @@ class CmsPageIndexer extends AbstractIndexer
         StoreManagerInterface $storeManager
     ) {
         $this->_cmsPageCollection = $cmsPageCollection;
-        $this->_cmsPageUrlRewriteGenerator = $cmsPageUrlRewriteGenerator;
-        $this->_storeManager  = $storeManager;
-        parent::__construct($urlPersist);
+        $this->_urlRewriteGenerator = $cmsPageUrlRewriteGenerator;
+
+        parent::__construct(
+			$urlPersist, 
+			$storeManager
+		);
     }
     	
     /**
@@ -78,6 +85,6 @@ class CmsPageIndexer extends AbstractIndexer
      */
 	protected function getRewriteGenerator()
 	{
-		return $this->_cmsPageUrlRewriteGenerator;
+		return $this->_urlRewriteGenerator;
 	}
 }
