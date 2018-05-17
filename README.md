@@ -1,4 +1,7 @@
 # Magento2 Indexer UrlRewrite 
+[![Total Downloads](https://poser.pugx.org/faonni/module-indexer-url-rewrite/downloads)](https://packagist.org/packages/faonni/module-indexer-url-rewrite)
+[![Latest Stable Version](https://poser.pugx.org/faonni/module-indexer-url-rewrite/v/stable)](https://packagist.org/packages/faonni/module-indexer-url-rewrite)
+
 Extension rebuild UrlRewrite index.
 
 ## Install with Composer as you go
