@@ -57,3 +57,28 @@ The corresponding version of the Smart Category Kit will be installed automatica
     php bin/magento indexer:reindex product_url_rewrite
     php bin/magento indexer:reindex cms_page_url_rewrite
     ```
+
+## Uninstall
+This works only with modules defined as Composer packages.
+
+#### Remove Extension
+
+1. Go to Magento2 root folder
+
+2. Enter following commands to remove:
+
+    ```bash
+    composer remove faonni/module-indexer-url-rewrite
+    ```
+
+### Completion of uninstall
+
+1. Go to Magento2 root folder
+
+2. Enter following commands:
+
+    ```bash
+    php bin/magento setup:upgrade
+    php bin/magento setup:di:compile
+    php bin/magento setup:static-content:deploy  (optional)
+    ```
