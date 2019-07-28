@@ -1,30 +1,59 @@
-# Magento2 Indexer UrlRewrite 
+# Magento2 Indexer UrlRewrite
 [![Total Downloads](https://poser.pugx.org/faonni/module-indexer-url-rewrite/downloads)](https://packagist.org/packages/faonni/module-indexer-url-rewrite)
 [![Latest Stable Version](https://poser.pugx.org/faonni/module-indexer-url-rewrite/v/stable)](https://packagist.org/packages/faonni/module-indexer-url-rewrite)
 
 Extension rebuild UrlRewrite index.
 
-## Install with Composer as you go
+## Compatibility
 
-1. Go to Magento 2 root folder
+Magento CE 2.0.x, 2.1.x, 2.2.x, 2.3.x
+
+## Install
+
+#### Install via Composer (recommend)
+The corresponding version of the Smart Category Kit will be installed automatically.
+
+1. Go to Magento2 root folder
 
 2. Enter following commands to install module:
 
     ```bash
-    composer require faonni/module-indexer-url-rewrite
+    composer faonni/module-indexer-url-rewrite
     ```
    Wait while dependencies are updated.
 
-3. Enter following commands to enable module:
+#### Manual Installation
+
+1. Create a folder {Magento root}/app/code/Faonni/IndexerUrlRewrite
+
+2. Download the corresponding [latest version](https://github.com/karliuka/m2.IndexerUrlRewrite/releases)
+
+3. Copy the unzip content to the folder ({Magento root}/app/code/Faonni/IndexerUrlRewrite)
+
+### Completion of installation
+
+1. Go to Magento2 root folder
+
+2. Enter following commands:
 
     ```bash
-	php bin/magento setup:upgrade
-	php bin/magento setup:static-content:deploy
+    php bin/magento setup:upgrade
+    php bin/magento setup:di:compile
+    php bin/magento setup:static-content:deploy  (optional)
     ```
-    	
-3. Command options:	
-    ```bash	
-	php bin/magento indexer:reindex category_url_rewrite
-	php bin/magento indexer:reindex product_url_rewrite
-	php bin/magento indexer:reindex cms_page_url_rewrite
+## Using
+
+1. Go to Magento2 root folder
+
+2. Enter following commands:
+
+    ```bash
+    php bin/magento indexer:reindex
+    ```
+    or (depending on need)
+
+    ```bash
+    php bin/magento indexer:reindex category_url_rewrite
+    php bin/magento indexer:reindex product_url_rewrite
+    php bin/magento indexer:reindex cms_page_url_rewrite
     ```
