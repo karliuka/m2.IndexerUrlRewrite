@@ -71,7 +71,7 @@ This works only with modules defined as Composer packages.
     composer remove faonni/module-indexer-url-rewrite
     ```
 
-### Completion of uninstall
+#### Completion of uninstall
 
 1. Go to Magento2 root folder
 
