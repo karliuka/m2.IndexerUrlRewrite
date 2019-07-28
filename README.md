@@ -30,7 +30,7 @@ The corresponding version of the Smart Category Kit will be installed automatica
 
 3. Copy the unzip content to the folder ({Magento root}/app/code/Faonni/IndexerUrlRewrite)
 
-### Completion of installation
+#### Completion of installation
 
 1. Go to Magento2 root folder
 
