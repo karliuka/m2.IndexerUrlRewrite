@@ -6,7 +6,7 @@ Extension rebuild UrlRewrite index.
 
 ## Compatibility
 
-Magento CE 2.0.x, 2.1.x, 2.2.x, 2.3.x
+Magento CE (EE) 2.0.x, 2.1.x, 2.2.x, 2.3.x
 
 ## Install
 
