@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\IndexerUrlRewrite\Model;
@@ -18,73 +18,74 @@ class ProductIndexer extends AbstractIndexer
 {
     /**
      * Product Collection
-     * 
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
+     *
+     * @var ProductCollection
      */
-    protected $_productCollection;
-    
+    private $productCollection;
+
     /**
      * UrlRewrite Generator
-     * 
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator
+     *
+     * @var ProductUrlRewriteGenerator
      */
-    protected $_urlRewriteGenerator;
+    private $urlRewriteGenerator;
 
     /**
      * Initialize Indexer
-     * 
+     *
+     * @param UrlPersistInterface $urlPersist
+     * @param StoreManagerInterface $storeManager
      * @param ProductCollection $productCollection
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
-     * @param UrlPersistInterface $urlPersist
-     * @param StoreManagerInterface $storeManager     
      */
     public function __construct(
-        ProductCollection $productCollection,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator,      
         UrlPersistInterface $urlPersist,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ProductCollection $productCollection,
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator
     ) {
-        $this->_productCollection = $productCollection;
-        $this->_urlRewriteGenerator = $productUrlRewriteGenerator;
+        $this->productCollection = $productCollection;
+        $this->urlRewriteGenerator = $productUrlRewriteGenerator;
 
         parent::__construct(
-			$urlPersist, 
-			$storeManager
-		);
+            $urlPersist,
+            $storeManager
+        );
     }
-    	
+
     /**
      * Retrieve entity collection
      *
      * @param integer $storeId
-     * @return object
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-	protected function getEntityCollection($storeId)
-	{
-		$this->_productCollection->clear();
-		$this->_productCollection->setStoreId($storeId)
-			->addAttributeToSelect(['url_path', 'url_key']);
-			
-		return $this->_productCollection;
-	}
-    
+    protected function getEntityCollection($storeId)
+    {
+        $this->productCollection->clear();
+        $this->productCollection->setStoreId($storeId)
+            ->addAttributeToSelect(['url_path', 'url_key']);
+
+        return $this->productCollection;
+    }
+
     /**
      * Retrieve entity type
      *
      * @return string
      */
-	protected function getEntityType()
-	{
-		return ProductUrlRewriteGenerator::ENTITY_TYPE;	
-	}
-    
+    protected function getEntityType()
+    {
+        return ProductUrlRewriteGenerator::ENTITY_TYPE;
+    }
+
     /**
-     * Retrieve entity rewrite generator
+     * Generate url rewrites
      *
-     * @return object
+     * @param \Magento\Catalog\Model\Product $entity
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-	protected function getRewriteGenerator()
-	{
-		return $this->_urlRewriteGenerator;
-	}
+    protected function generate($entity)
+    {
+        return $this->urlRewriteGenerator->generate($entity);
+    }
 }

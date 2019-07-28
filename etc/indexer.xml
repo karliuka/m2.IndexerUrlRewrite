@@ -2,11 +2,11 @@
 <!--
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
     <indexer id="product_url_rewrite" view_id="product_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\ProductIndexer">
         <title translate="true">Product URL rewrites</title>
@@ -19,5 +19,5 @@
     <indexer id="cms_page_url_rewrite" view_id="cms_page_url_rewrite" class="Faonni\IndexerUrlRewrite\Model\CmsPageIndexer">
         <title translate="true">Cms Page URL rewrites</title>
         <description translate="true">Indexed Cms Page URL rewrites association</description>
-    </indexer>  
+    </indexer>
 </config>

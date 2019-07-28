@@ -1,11 +1,12 @@
 <?php
 /**
  * Copyright © 2011-2018 Karliuka Vitalii(karliuka.vitalii@gmail.com)
- * 
+ *
  * See COPYING.txt for license details.
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
+use \Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Store\Model\Store;
@@ -17,57 +18,58 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * Abstract Indexer
  */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
-{         
+{
     /**
      * Url Persist
-     * 
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     */     
-    protected $_urlPersist;
-    
+     *
+     * @var UrlPersistInterface
+     */
+    private $urlPersist;
+
     /**
      * Store Manager
-     * 
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
-     */ 
-    protected $_storeManager;
-        
+     *
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
     /**
      * Initialize Indexer
-     * 
+     *
      * @param UrlPersistInterface $urlPersist
      * @param StoreManagerInterface $storeManager
      */
-    public function __construct(     
+    public function __construct(
         UrlPersistInterface $urlPersist,
         StoreManagerInterface $storeManager
-    ) {      
-        $this->_urlPersist = $urlPersist;
-        $this->_storeManager = $storeManager;
+    ) {
+        $this->urlPersist = $urlPersist;
+        $this->storeManager = $storeManager;
     }
-    
+
     /**
      * Retrieve entity collection
      *
      * @param integer $storeId
-     * @return object
+     * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-	abstract protected function getEntityCollection($storeId);
-    
+    abstract protected function getEntityCollection($storeId);
+
     /**
      * Retrieve entity type
      *
      * @return string
      */
-	abstract protected function getEntityType();
-    
+    abstract protected function getEntityType();
+
     /**
-     * Retrieve entity rewrite generator
+     * Generate url rewrites
      *
-     * @return object
+     * @param AbstractModel $entity
+     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-	abstract protected function getRewriteGenerator();
-            
+    abstract protected function generate($entity);
+
     /**
      * Execute full indexation
      *
@@ -75,65 +77,77 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function executeFull()
     {
-        foreach ($this->_storeManager->getStores() as $store){
-            $this->_storeManager->setCurrentStore($store->getId());
+        foreach ($this->storeManager->getStores() as $store) {
+            $this->storeManager->setCurrentStore((string)$store->getId());
             $this->executeStore($store->getId());
         }
     }
-    
+
     /**
      * Execute indexation from store
      *
      * @return void
      */
-    private function executeStore($storeId){
-        foreach($this->getEntityCollection($storeId) as $entity) {
+    private function executeStore($storeId)
+    {
+        foreach ($this->getEntityCollection($storeId) as $entity) {
             $this->deleteByEntity($entity);
             try {
-                $this->_urlPersist->replace(
-                    $this->getRewriteGenerator()->generate($entity)
-                );
-            } catch(\Exception $e) {
+                $this->urlPersist->replace($this->generate($entity));
+            } catch (\Exception $e) {
                 // add log
             }
         }
     }
-    
+
     /**
-     * Remove rewrites 
+     * Retrieve store id
      *
-     * @param object $entity
+     * @param AbstractModel $entity
+     * @return string
+     */
+    private function getStoreId(AbstractModel $entity)
+    {
+        return method_exists($entity, 'getStore') && $entity->getStore()
+            ? $entity->getStore()->getId()
+            : Store::DEFAULT_STORE_ID;
+    }
+
+    /**
+     * Remove rewrites
+     *
+     * @param AbstractModel $entity
      * @return void
      */
-    protected function deleteByEntity($entity)
+    private function deleteByEntity(AbstractModel $entity)
     {
-		$storeId = $entity->getStore() 
-			? $entity->getStore()->getId() 
-			: Store::DEFAULT_STORE_ID;
-			
-		$this->_urlPersist->deleteByData([
-			UrlRewrite::ENTITY_ID => $entity->getId(),
-			UrlRewrite::ENTITY_TYPE => $this->getEntityType(),
-			UrlRewrite::REDIRECT_TYPE => 0,
-			UrlRewrite::STORE_ID => $storeId
-		]);	
-	}
-    	
+        $this->urlPersist->deleteByData([
+            UrlRewrite::ENTITY_ID => $entity->getId(),
+            UrlRewrite::ENTITY_TYPE => $this->getEntityType(),
+            UrlRewrite::REDIRECT_TYPE => 0,
+            UrlRewrite::STORE_ID => $this->getStoreId($entity)
+        ]);
+    }
+
     /**
      * Execute materialization on ids entities
      *
      * @param int[] $ids
      * @return void
      */
-    public function execute($ids){}
-    
+    public function execute($ids)
+    {
+    }
+
     /**
      * Execute partial indexation by ID list
      *
      * @param int[] $ids
      * @return void
      */
-    public function executeList(array $ids){}
+    public function executeList(array $ids)
+    {
+    }
 
     /**
      * Execute partial indexation by ID
@@ -141,5 +155,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param int $id
      * @return void
      */
-    public function executeRow($id){}
+    public function executeRow($id)
+    {
+    }
 }
