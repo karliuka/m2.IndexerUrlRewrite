@@ -18,7 +18,7 @@ The corresponding version of the Smart Category Kit will be installed automatica
 2. Enter following commands to install module:
 
     ```bash
-    composer faonni/module-indexer-url-rewrite
+    composer require faonni/module-indexer-url-rewrite
     ```
    Wait while dependencies are updated.
 
