@@ -39,7 +39,7 @@ The corresponding version of the Smart Category Kit will be installed automatica
     ```bash
     php bin/magento setup:upgrade
     php bin/magento setup:di:compile
-    php bin/magento setup:static-content:deploy  (optional)
+    php bin/magento setup:static-content:deploy (optional)
     ```
 ## Using
 
@@ -80,5 +80,5 @@ This works only with modules defined as Composer packages.
     ```bash
     php bin/magento setup:upgrade
     php bin/magento setup:di:compile
-    php bin/magento setup:static-content:deploy  (optional)
+    php bin/magento setup:static-content:deploy (optional)
     ```
