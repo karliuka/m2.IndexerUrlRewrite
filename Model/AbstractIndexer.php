@@ -5,13 +5,14 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use \Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract Indexer
@@ -33,17 +34,27 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     private $storeManager;
 
     /**
+     * Logger
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Initialize Indexer
      *
      * @param UrlPersistInterface $urlPersist
      * @param StoreManagerInterface $storeManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        LoggerInterface $logger
     ) {
         $this->urlPersist = $urlPersist;
         $this->storeManager = $storeManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,6 +96,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * Execute indexation from store
      *
+     * @param integer $storeId
      * @return void
      */
     private function executeStore($storeId)
@@ -94,7 +106,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
             try {
                 $this->urlPersist->replace($this->generate($entity));
             } catch (\Exception $e) {
-                // add log
+                $this->logger->critical($e);
             }
         }
     }
