@@ -29,6 +29,7 @@ For Magento CE (EE) 2.3.x
     composer require faonni/module-indexer-url-rewrite:2.3.*
     ```
 
+
    Wait while dependencies are updated.
 
 #### Manual Installation
