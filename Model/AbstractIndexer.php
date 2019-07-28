@@ -53,9 +53,10 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Retrieve entity collection
      *
      * @param integer $storeId
+     * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    abstract protected function getEntityCollection($storeId);
+    abstract protected function getEntityCollection($storeId, array $ids = []);
 
     /**
      * Retrieve entity type
@@ -76,11 +77,12 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Execute indexation from store
      *
      * @param integer $storeId
+     * @param integer[] $ids
      * @return void
      */
-    private function executeStore($storeId)
+    private function executeStore($storeId, array $ids = [])
     {
-        foreach ($this->getEntityCollection($storeId) as $entity) {
+        foreach ($this->getEntityCollection($storeId, $ids) as $entity) {
             $this->deleteEntity($entity->getId(), $storeId);
             try {
                 $this->urlPersist->replace($this->generate($entity));
@@ -117,7 +119,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         foreach ($this->storeManager->getStores() as $store) {
             $this->storeManager->setCurrentStore((string)$store->getId());
-            $this->executeStore($store->getId());
+            $this->executeStore($store->getId(), $ids);
         }
     }
 

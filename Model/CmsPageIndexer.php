@@ -5,7 +5,7 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use Magento\Cms\Model\ResourceModel\Page\Collection as CmsPageCollection;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as CmsPageCollectionFactory;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 
 /**
@@ -14,11 +14,11 @@ use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 class CmsPageIndexer extends AbstractIndexer
 {
     /**
-     * CmsPage collection
+     * CmsPage collection factory
      *
-     * @var CmsPageCollection
+     * @var CmsPageCollectionFactory
      */
-    private $cmsPageCollection;
+    private $cmsPageCollectionFactory;
 
     /**
      * UrlRewrite generator
@@ -31,15 +31,15 @@ class CmsPageIndexer extends AbstractIndexer
      * Initialize indexer
      *
      * @param Context $context
-     * @param CmsPageCollection $cmsPageCollection
+     * @param CmsPageCollectionFactory $cmsPageCollectionFactory
      * @param CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
      */
     public function __construct(
         Context $context,
-        CmsPageCollection $cmsPageCollection,
+        CmsPageCollectionFactory $cmsPageCollectionFactory,
         CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
     ) {
-        $this->cmsPageCollection = $cmsPageCollection;
+        $this->cmsPageCollectionFactory = $cmsPageCollectionFactory;
         $this->urlRewriteGenerator = $cmsPageUrlRewriteGenerator;
 
         parent::__construct(
@@ -51,15 +51,20 @@ class CmsPageIndexer extends AbstractIndexer
      * Retrieve entity collection
      *
      * @param integer $storeId
+     * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    protected function getEntityCollection($storeId)
+    protected function getEntityCollection($storeId, array $ids = [])
     {
-        $this->cmsPageCollection
-            ->addStoreFilter($storeId)
+        $collection = $this->cmsPageCollectionFactory->create();
+        if (count($ids)) {
+            $collection->addFieldToFilter('page_id', ['in' => $ids]);
+        }
+
+        $collection->addStoreFilter($storeId)
             ->addFieldToSelect(['identifier']);
 
-        return $this->cmsPageCollection;
+        return $collection;
     }
 
     /**

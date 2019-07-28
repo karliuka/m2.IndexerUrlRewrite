@@ -5,7 +5,7 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
 /**
@@ -14,11 +14,11 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 class ProductIndexer extends AbstractIndexer
 {
     /**
-     * Product collection
+     * Product collection factory
      *
-     * @var ProductCollection
+     * @var ProductCollectionFactory
      */
-    private $productCollection;
+    private $productCollectionFactory;
 
     /**
      * UrlRewrite generator
@@ -31,15 +31,15 @@ class ProductIndexer extends AbstractIndexer
      * Initialize indexer
      *
      * @param Context $context
-     * @param ProductCollection $productCollection
+     * @param ProductCollectionFactory $productCollectionFactory
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      */
     public function __construct(
         Context $context,
-        ProductCollection $productCollection,
+        ProductCollectionFactory $productCollectionFactory,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator
     ) {
-        $this->productCollection = $productCollection;
+        $this->productCollectionFactory = $productCollectionFactory;
         $this->urlRewriteGenerator = $productUrlRewriteGenerator;
 
         parent::__construct(
@@ -51,15 +51,20 @@ class ProductIndexer extends AbstractIndexer
      * Retrieve entity collection
      *
      * @param integer $storeId
+     * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    protected function getEntityCollection($storeId)
+    protected function getEntityCollection($storeId, array $ids = [])
     {
-        $this->productCollection->clear();
-        $this->productCollection->setStoreId($storeId)
+        $collection = $this->productCollectionFactory->create();
+        if (count($ids)) {
+            $collection->addAttributeToFilter('entity_id', ['in' => $ids]);
+        }
+
+        $collection->setStoreId($storeId)
             ->addAttributeToSelect(['url_path', 'url_key']);
 
-        return $this->productCollection;
+        return $collection;
     }
 
     /**

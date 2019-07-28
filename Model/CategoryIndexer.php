@@ -5,7 +5,7 @@
  */
 namespace Faonni\IndexerUrlRewrite\Model;
 
-use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
@@ -14,11 +14,11 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 class CategoryIndexer extends AbstractIndexer
 {
     /**
-     * Category collection
+     * Category collection factory
      *
-     * @var CategoryCollection
+     * @var CategoryCollectionFactory
      */
-    private $categoryCollection;
+    private $categoryCollectionFactory;
 
     /**
      * UrlRewrite generator
@@ -31,15 +31,15 @@ class CategoryIndexer extends AbstractIndexer
      * Initialize indexer
      *
      * @param Context $context
-     * @param CategoryCollection $categoryCollection
+     * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      */
     public function __construct(
         Context $context,
-        CategoryCollection $categoryCollection,
+        CategoryCollectionFactory $categoryCollectionFactory,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
     ) {
-        $this->categoryCollection = $categoryCollection;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->urlRewriteGenerator = $categoryUrlRewriteGenerator;
 
         parent::__construct(
@@ -51,16 +51,21 @@ class CategoryIndexer extends AbstractIndexer
      * Retrieve entity collection
      *
      * @param integer $storeId
+     * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    protected function getEntityCollection($storeId)
+    protected function getEntityCollection($storeId, array $ids = [])
     {
-        $this->categoryCollection->clear();
-        $this->categoryCollection->setStoreId($storeId)
+        $collection = $this->categoryCollectionFactory->create();
+        if (count($ids)) {
+            $collection->addAttributeToFilter('entity_id', ['in' => $ids]);
+        }
+
+        $collection->setStoreId($storeId)
             ->addAttributeToSelect(['url_path', 'url_key'])
             ->addAttributeToFilter('level', ['gt' => 1]);
 
-        return $this->categoryCollection;
+        return $collection;
     }
 
     /**
