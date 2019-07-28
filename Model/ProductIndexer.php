@@ -7,52 +7,43 @@ namespace Faonni\IndexerUrlRewrite\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Psr\Log\LoggerInterface;
 
 /**
- * Product Indexer
+ * Product indexer
  */
 class ProductIndexer extends AbstractIndexer
 {
     /**
-     * Product Collection
+     * Product collection
      *
      * @var ProductCollection
      */
     private $productCollection;
 
     /**
-     * UrlRewrite Generator
+     * UrlRewrite generator
      *
      * @var ProductUrlRewriteGenerator
      */
     private $urlRewriteGenerator;
 
     /**
-     * Initialize Indexer
+     * Initialize indexer
      *
-     * @param UrlPersistInterface $urlPersist
-     * @param StoreManagerInterface $storeManager
+     * @param Context $context
      * @param ProductCollection $productCollection
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        UrlPersistInterface $urlPersist,
-        StoreManagerInterface $storeManager,
+        Context $context,
         ProductCollection $productCollection,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        LoggerInterface $logger
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator
     ) {
         $this->productCollection = $productCollection;
         $this->urlRewriteGenerator = $productUrlRewriteGenerator;
 
         parent::__construct(
-            $urlPersist,
-            $storeManager,
-            $logger
+            $context
         );
     }
 

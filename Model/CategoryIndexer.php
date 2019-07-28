@@ -7,52 +7,43 @@ namespace Faonni\IndexerUrlRewrite\Model;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Psr\Log\LoggerInterface;
 
 /**
- * Category Indexer
+ * Category indexer
  */
 class CategoryIndexer extends AbstractIndexer
 {
     /**
-     * Category Collection
+     * Category collection
      *
      * @var CategoryCollection
      */
     private $categoryCollection;
 
     /**
-     * UrlRewrite Generator
+     * UrlRewrite generator
      *
      * @var CategoryUrlRewriteGenerator
      */
     private $urlRewriteGenerator;
 
     /**
-     * Initialize Indexer
+     * Initialize indexer
      *
-     * @param UrlPersistInterface $urlPersist
-     * @param StoreManagerInterface $storeManager
+     * @param Context $context
      * @param CategoryCollection $categoryCollection
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        UrlPersistInterface $urlPersist,
-        StoreManagerInterface $storeManager,
+        Context $context,
         CategoryCollection $categoryCollection,
-        CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
-        LoggerInterface $logger
+        CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
     ) {
         $this->categoryCollection = $categoryCollection;
         $this->urlRewriteGenerator = $categoryUrlRewriteGenerator;
 
         parent::__construct(
-            $urlPersist,
-            $storeManager,
-            $logger
+            $context
         );
     }
 

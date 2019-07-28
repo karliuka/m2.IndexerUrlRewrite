@@ -7,9 +7,6 @@ namespace Faonni\IndexerUrlRewrite\Model;
 
 use Magento\Cms\Model\ResourceModel\Page\Collection as CmsPageCollection;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * CmsPage Indexer
@@ -17,42 +14,36 @@ use Psr\Log\LoggerInterface;
 class CmsPageIndexer extends AbstractIndexer
 {
     /**
-     * CmsPage Collection
+     * CmsPage collection
      *
      * @var CmsPageCollection
      */
     private $cmsPageCollection;
 
     /**
-     * UrlRewrite Generator
+     * UrlRewrite generator
      *
      * @var CmsPageUrlRewriteGenerator
      */
     private $urlRewriteGenerator;
 
     /**
-     * Initialize Indexer
+     * Initialize indexer
      *
-     * @param UrlPersistInterface $urlPersist
-     * @param StoreManagerInterface $storeManager
+     * @param Context $context
      * @param CmsPageCollection $cmsPageCollection
      * @param CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        UrlPersistInterface $urlPersist,
-        StoreManagerInterface $storeManager,
+        Context $context,
         CmsPageCollection $cmsPageCollection,
-        CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator,
-        LoggerInterface $logger
+        CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
     ) {
         $this->cmsPageCollection = $cmsPageCollection;
         $this->urlRewriteGenerator = $cmsPageUrlRewriteGenerator;
 
         parent::__construct(
-            $urlPersist,
-            $storeManager,
-            $logger
+            $context
         );
     }
 

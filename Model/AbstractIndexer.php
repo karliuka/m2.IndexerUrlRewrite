@@ -8,53 +8,45 @@ namespace Faonni\IndexerUrlRewrite\Model;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Psr\Log\LoggerInterface;
 
 /**
- * Abstract Indexer
+ * Abstract indexer
  */
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
 {
     /**
-     * Url Persist
+     * Url persist
      *
-     * @var UrlPersistInterface
+     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
      */
     private $urlPersist;
 
     /**
-     * Store Manager
+     * Store manager
      *
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
      * Logger
      *
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
      * Initialize Indexer
      *
-     * @param UrlPersistInterface $urlPersist
-     * @param StoreManagerInterface $storeManager
-     * @param LoggerInterface $logger
+     * @param Context $context
      */
     public function __construct(
-        UrlPersistInterface $urlPersist,
-        StoreManagerInterface $storeManager,
-        LoggerInterface $logger
+        Context $context
     ) {
-        $this->urlPersist = $urlPersist;
-        $this->storeManager = $storeManager;
-        $this->logger = $logger;
+        $this->urlPersist = $context->getUrlPersist();
+        $this->storeManager = $context->getStoreManager();
+        $this->logger = $context->getLogger();
     }
 
     /**
@@ -79,19 +71,6 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
     abstract protected function generate($entity);
-
-    /**
-     * Execute full indexation
-     *
-     * @return void
-     */
-    public function executeFull()
-    {
-        foreach ($this->storeManager->getStores() as $store) {
-            $this->storeManager->setCurrentStore((string)$store->getId());
-            $this->executeStore($store->getId());
-        }
-    }
 
     /**
      * Execute indexation from store
@@ -136,6 +115,20 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function execute($ids)
     {
+        foreach ($this->storeManager->getStores() as $store) {
+            $this->storeManager->setCurrentStore((string)$store->getId());
+            $this->executeStore($store->getId());
+        }
+    }
+
+    /**
+     * Execute full indexation
+     *
+     * @return void
+     */
+    public function executeFull()
+    {
+        $this->execute([]);
     }
 
     /**
@@ -146,6 +139,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function executeList(array $ids)
     {
+        $this->execute($ids);
     }
 
     /**
@@ -156,5 +150,6 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      */
     public function executeRow($id)
     {
+        $this->execute([$id]);
     }
 }
