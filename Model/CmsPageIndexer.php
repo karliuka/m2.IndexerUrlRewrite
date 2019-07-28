@@ -9,6 +9,7 @@ use Magento\Cms\Model\ResourceModel\Page\Collection as CmsPageCollection;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * CmsPage Indexer
@@ -36,19 +37,22 @@ class CmsPageIndexer extends AbstractIndexer
      * @param StoreManagerInterface $storeManager
      * @param CmsPageCollection $cmsPageCollection
      * @param CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
+     * @param LoggerInterface $logger
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         StoreManagerInterface $storeManager,
         CmsPageCollection $cmsPageCollection,
-        CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
+        CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator,
+        LoggerInterface $logger
     ) {
         $this->cmsPageCollection = $cmsPageCollection;
         $this->urlRewriteGenerator = $cmsPageUrlRewriteGenerator;
 
         parent::__construct(
             $urlPersist,
-            $storeManager
+            $storeManager,
+            $logger
         );
     }
 

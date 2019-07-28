@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Product Indexer
@@ -36,19 +37,22 @@ class ProductIndexer extends AbstractIndexer
      * @param StoreManagerInterface $storeManager
      * @param ProductCollection $productCollection
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param LoggerInterface $logger
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         StoreManagerInterface $storeManager,
         ProductCollection $productCollection,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        LoggerInterface $logger
     ) {
         $this->productCollection = $productCollection;
         $this->urlRewriteGenerator = $productUrlRewriteGenerator;
 
         parent::__construct(
             $urlPersist,
-            $storeManager
+            $storeManager,
+            $logger
         );
     }
 

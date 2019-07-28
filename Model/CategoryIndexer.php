@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Category Indexer
@@ -36,19 +37,22 @@ class CategoryIndexer extends AbstractIndexer
      * @param StoreManagerInterface $storeManager
      * @param CategoryCollection $categoryCollection
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
+     * @param LoggerInterface $logger
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         StoreManagerInterface $storeManager,
         CategoryCollection $categoryCollection,
-        CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
+        CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
+        LoggerInterface $logger
     ) {
         $this->categoryCollection = $categoryCollection;
         $this->urlRewriteGenerator = $categoryUrlRewriteGenerator;
 
         parent::__construct(
             $urlPersist,
-            $storeManager
+            $storeManager,
+            $logger
         );
     }
 

@@ -102,7 +102,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     private function executeStore($storeId)
     {
         foreach ($this->getEntityCollection($storeId) as $entity) {
-            $this->deleteByEntity($entity);
+            $this->deleteEntity($entity->getId(), $storeId);
             try {
                 $this->urlPersist->replace($this->generate($entity));
             } catch (\Exception $e) {
@@ -112,38 +112,26 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     }
 
     /**
-     * Retrieve store id
-     *
-     * @param AbstractModel $entity
-     * @return string
-     */
-    private function getStoreId(AbstractModel $entity)
-    {
-        return method_exists($entity, 'getStore') && $entity->getStore()
-            ? $entity->getStore()->getId()
-            : Store::DEFAULT_STORE_ID;
-    }
-
-    /**
      * Remove rewrites
      *
-     * @param AbstractModel $entity
+     * @param integer $entityId
+     * @param integer $storeId
      * @return void
      */
-    private function deleteByEntity(AbstractModel $entity)
+    private function deleteEntity($entityId, $storeId)
     {
         $this->urlPersist->deleteByData([
-            UrlRewrite::ENTITY_ID => $entity->getId(),
+            UrlRewrite::ENTITY_ID => $entityId,
             UrlRewrite::ENTITY_TYPE => $this->getEntityType(),
             UrlRewrite::REDIRECT_TYPE => 0,
-            UrlRewrite::STORE_ID => $this->getStoreId($entity)
+            UrlRewrite::STORE_ID => $storeId
         ]);
     }
 
     /**
      * Execute materialization on ids entities
      *
-     * @param int[] $ids
+     * @param integer[] $ids
      * @return void
      */
     public function execute($ids)
@@ -153,7 +141,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * Execute partial indexation by ID list
      *
-     * @param int[] $ids
+     * @param integer[] $ids
      * @return void
      */
     public function executeList(array $ids)
@@ -163,7 +151,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * Execute partial indexation by ID
      *
-     * @param int $id
+     * @param integer $id
      * @return void
      */
     public function executeRow($id)
