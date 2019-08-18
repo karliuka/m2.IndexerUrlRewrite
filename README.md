@@ -11,7 +11,6 @@ Magento CE (EE) 2.0.x, 2.1.x, 2.2.x, 2.3.x
 ## Install
 
 #### Install via Composer (recommend)
-The corresponding version of the Smart Category Kit will be installed automatically.
 
 1. Go to Magento2 root folder
 
