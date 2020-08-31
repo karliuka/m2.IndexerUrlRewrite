@@ -6,7 +6,7 @@ Extension rebuild UrlRewrite index.
 
 ## Compatibility
 
-Magento CE (EE) 2.0.x, 2.1.x, 2.2.x, 2.3.x
+Magento CE (EE) 2.0.x, 2.1.x, 2.2.x, 2.3.x, 2.4.x
 
 ## Install
 
@@ -27,6 +27,12 @@ The corresponding version of the Smart Category Kit will be installed automatica
 
     ```bash
     composer require faonni/module-indexer-url-rewrite:2.3.*
+    ```
+
+     For Magento CE (EE) 2.4.x
+
+    ```bash
+    composer require faonni/module-indexer-url-rewrite:2.4.*
     ```
 
    Wait while dependencies are updated.
