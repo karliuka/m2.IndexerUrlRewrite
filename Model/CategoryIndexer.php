@@ -18,14 +18,14 @@ class CategoryIndexer extends AbstractIndexer
      *
      * @var CategoryCollectionFactory
      */
-    private $categoryCollectionFactory;
+    public $categoryCollectionFactory;
 
     /**
      * UrlRewrite generator
      *
      * @var CategoryUrlRewriteGenerator
      */
-    private $urlRewriteGenerator;
+    public $urlRewriteGenerator;
 
     /**
      * Initialize indexer
@@ -54,7 +54,7 @@ class CategoryIndexer extends AbstractIndexer
      * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    protected function getEntityCollection($storeId, array $ids = [])
+    public function getEntityCollection($storeId, array $ids = [])
     {
         $collection = $this->categoryCollectionFactory->create();
         if (count($ids)) {
@@ -73,7 +73,7 @@ class CategoryIndexer extends AbstractIndexer
      *
      * @return string
      */
-    protected function getEntityType()
+    public function getEntityType()
     {
         return CategoryUrlRewriteGenerator::ENTITY_TYPE;
     }
@@ -84,7 +84,7 @@ class CategoryIndexer extends AbstractIndexer
      * @param \Magento\Catalog\Model\Category $entity
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generate($entity)
+    public function generate($entity)
     {
         return $this->urlRewriteGenerator->generate($entity);
     }

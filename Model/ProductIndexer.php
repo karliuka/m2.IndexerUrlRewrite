@@ -18,14 +18,14 @@ class ProductIndexer extends AbstractIndexer
      *
      * @var ProductCollectionFactory
      */
-    private $productCollectionFactory;
+    public $productCollectionFactory;
 
     /**
      * UrlRewrite generator
      *
      * @var ProductUrlRewriteGenerator
      */
-    private $urlRewriteGenerator;
+    public $urlRewriteGenerator;
 
     /**
      * Initialize indexer
@@ -54,7 +54,7 @@ class ProductIndexer extends AbstractIndexer
      * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    protected function getEntityCollection($storeId, array $ids = [])
+    public function getEntityCollection($storeId, array $ids = [])
     {
         $collection = $this->productCollectionFactory->create();
         if (count($ids)) {
@@ -72,7 +72,7 @@ class ProductIndexer extends AbstractIndexer
      *
      * @return string
      */
-    protected function getEntityType()
+    public function getEntityType()
     {
         return ProductUrlRewriteGenerator::ENTITY_TYPE;
     }
@@ -83,7 +83,7 @@ class ProductIndexer extends AbstractIndexer
      * @param \Magento\Catalog\Model\Product $entity
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generate($entity)
+    public function generate($entity)
     {
         return $this->urlRewriteGenerator->generate($entity);
     }

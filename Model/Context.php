@@ -19,21 +19,21 @@ class Context
      *
      * @var UrlPersistInterface
      */
-    private $urlPersist;
+    public $urlPersist;
 
     /**
      * Store Manager
      *
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    public $storeManager;
 
     /**
      * Logger
      *
      * @var LoggerInterface
      */
-    private $logger;
+    public $logger;
 
     /**
      * Initialize context
