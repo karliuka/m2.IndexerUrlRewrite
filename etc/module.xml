@@ -7,9 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Faonni_IndexerUrlRewrite" setup_version="2.0.8">
+    <module name="Faonni_IndexerUrlRewrite" setup_version="2.4.0">
         <sequence>
+            <module name="Magento_UrlRewrite"/>
+            <module name="Magento_Store"/>
+            <module name="Magento_Catalog"/>
             <module name="Magento_CatalogUrlRewrite"/>
+            <module name="Magento_Cms"/>
             <module name="Magento_CmsUrlRewrite"/>
         </sequence>
     </module>
