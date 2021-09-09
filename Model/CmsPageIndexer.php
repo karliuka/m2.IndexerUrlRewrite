@@ -9,20 +9,16 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as CmsPageCollectionF
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 
 /**
- * CmsPage Indexer
+ * Cms page reindexer
  */
 class CmsPageIndexer extends AbstractIndexer
 {
     /**
-     * CmsPage collection factory
-     *
      * @var CmsPageCollectionFactory
      */
     private $cmsPageCollectionFactory;
 
     /**
-     * UrlRewrite generator
-     *
      * @var CmsPageUrlRewriteGenerator
      */
     private $urlRewriteGenerator;

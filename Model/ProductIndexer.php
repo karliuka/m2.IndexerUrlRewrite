@@ -9,20 +9,16 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductColl
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
 /**
- * Product indexer
+ * Product reindexer
  */
 class ProductIndexer extends AbstractIndexer
 {
     /**
-     * Product collection factory
-     *
      * @var ProductCollectionFactory
      */
     private $productCollectionFactory;
 
     /**
-     * UrlRewrite generator
-     *
      * @var ProductUrlRewriteGenerator
      */
     private $urlRewriteGenerator;
