@@ -1,0 +1,6 @@
+parameters:
+    checkExplicitMixedMissingReturn: true
+    checkPhpDocMissingReturn: true
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Method (?:.*?) return type has no value type specified in iterable type Magento\\Framework\\Data\\Collection\\AbstractDb.#'

@@ -15,22 +15,16 @@ use Psr\Log\LoggerInterface;
 class Context
 {
     /**
-     * Url Persist
-     *
      * @var UrlPersistInterface
      */
     private $urlPersist;
 
     /**
-     * Store Manager
-     *
      * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * Logger
-     *
      * @var LoggerInterface
      */
     private $logger;

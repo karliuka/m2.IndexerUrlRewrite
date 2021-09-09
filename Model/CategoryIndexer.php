@@ -9,20 +9,16 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
- * Category indexer
+ * Category reindexer
  */
 class CategoryIndexer extends AbstractIndexer
 {
     /**
-     * Category collection factory
-     *
      * @var CategoryCollectionFactory
      */
     private $categoryCollectionFactory;
 
     /**
-     * UrlRewrite generator
-     *
      * @var CategoryUrlRewriteGenerator
      */
     private $urlRewriteGenerator;

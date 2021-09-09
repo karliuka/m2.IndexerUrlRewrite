@@ -16,22 +16,16 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
 {
     /**
-     * Url persist
-     *
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
      */
     private $urlPersist;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * Logger
-     *
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
