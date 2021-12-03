@@ -18,17 +18,17 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface
      */
-    private $urlPersist;
+    public $urlPersist;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $storeManager;
+    public $storeManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    public $logger;
 
     /**
      * Initialize Indexer
@@ -50,14 +50,14 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param integer[] $ids
      * @return \Magento\Framework\Data\Collection\AbstractDb
      */
-    abstract protected function getEntityCollection($storeId, array $ids = []);
+    abstract public function getEntityCollection($storeId, array $ids = []);
 
     /**
      * Retrieve entity type
      *
      * @return string
      */
-    abstract protected function getEntityType();
+    abstract public function getEntityType();
 
     /**
      * Generate url rewrites
@@ -65,7 +65,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param AbstractModel $entity
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    abstract protected function generate($entity);
+    abstract public function generate($entity);
 
     /**
      * Execute indexation from store
@@ -74,7 +74,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param integer[] $ids
      * @return void
      */
-    private function executeStore($storeId, array $ids = [])
+    public function executeStore($storeId, array $ids = [])
     {
         foreach ($this->getEntityCollection($storeId, $ids) as $entity) {
             $this->deleteEntity($entity->getId(), $storeId);
@@ -93,7 +93,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @param integer $storeId
      * @return void
      */
-    private function deleteEntity($entityId, $storeId)
+    public function deleteEntity($entityId, $storeId)
     {
         $this->urlPersist->deleteByData([
             UrlRewrite::ENTITY_ID => $entityId,

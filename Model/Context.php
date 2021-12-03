@@ -17,17 +17,17 @@ class Context
     /**
      * @var UrlPersistInterface
      */
-    private $urlPersist;
+    public $urlPersist;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    public $storeManager;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    public $logger;
 
     /**
      * Initialize context

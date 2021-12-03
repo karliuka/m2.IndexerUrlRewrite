@@ -16,12 +16,12 @@ class CmsPageIndexer extends AbstractIndexer
     /**
      * @var CmsPageCollectionFactory
      */
-    private $cmsPageCollectionFactory;
+    protected $cmsPageCollectionFactory;
 
     /**
      * @var CmsPageUrlRewriteGenerator
      */
-    private $urlRewriteGenerator;
+    protected $urlRewriteGenerator;
 
     /**
      * Initialize indexer
